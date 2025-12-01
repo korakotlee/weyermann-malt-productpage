@@ -50,3 +50,6 @@ secrets/
 .claude/commands/maw.*
 .claude/commands/maw-*
 .codex/prompts/maw*.md
+
+# MCP Servers
+.playwright-mcp
