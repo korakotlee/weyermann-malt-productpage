@@ -281,10 +281,10 @@ END_TIME_UTC=$(date -u +"%H:%M")
 END_TIME_LOCAL=$(TZ='Asia/Bangkok' date +"%H:%M")
 
 # Create directory structure
-mkdir -p retrospectives/$(date +%Y/%m)
+mkdir -p retrospectives
 
 # Create retrospective file with auto-filled date/time
-cat > retrospectives/$(date +%Y/%m)/${SESSION_DATE}_${END_TIME_UTC//:/-}_retrospective.md << EOF
+cat > retrospectives/${SESSION_DATE}_${END_TIME_UTC//:/-}_retrospective.md << EOF
 # Session Retrospective
 
 **Session Date**: ${SESSION_DATE}
@@ -396,7 +396,7 @@ git add retrospectives/
 git commit -m "docs: Add session retrospective $(date +%Y-%m-%d)"
 
 # Comment on relevant issue/PR with actual path
-RETRO_PATH="retrospectives/$(date +%Y/%m)/$(date +%Y-%m-%d_%H-%M)_retrospective.md"
+RETRO_PATH="retrospectives/$(date +%Y-%m-%d_%H-%M)_retrospective.md"
 gh issue comment XXX --body "Session retrospective created: ${RETRO_PATH}"
 ```
 
