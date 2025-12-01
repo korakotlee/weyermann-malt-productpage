@@ -74,13 +74,26 @@ if command -v osascript &> /dev/null; then
     osascript -e "display notification \"$AGENT_NAME completed\" with title \"Claude Code\" sound name \"Glass\""
 fi
 
-# Optional: Speak completion (macOS)
+# Optional: Speak completion (macOS) with queue
 if command -v say &> /dev/null; then
+    SPEECH_QUEUE="${CLAUDE_PROJECT_DIR:-.}/.agent-locks/speech_queue"
+    mkdir -p "$(dirname "$SPEECH_QUEUE")"
+
+    # Build message
     if [ -n "$LAST_MESSAGE" ]; then
-        say "$AGENT_NAME says: $LAST_MESSAGE" &
+        MESSAGE="$AGENT_NAME says: $LAST_MESSAGE"
     else
-        say "$AGENT_NAME completed" &
+        MESSAGE="$AGENT_NAME completed"
     fi
+
+    # Queue the speech (run in background with lock)
+    (
+        # Wait for any running say process to finish
+        while pgrep -x "say" > /dev/null; do
+            sleep 0.5
+        done
+        say "$MESSAGE"
+    ) &
 fi
 
 # Optional: Send to tmux status line
