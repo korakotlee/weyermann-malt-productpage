@@ -38,25 +38,17 @@ if [ -n "$TRANSCRIPT_TO_READ" ] && [ -f "$TRANSCRIPT_TO_READ" ]; then
     LAST_MESSAGE=$(tail -20 "$TRANSCRIPT_TO_READ" | grep -o '"text":"[^"]*"' | tail -1 | sed 's/"text":"//;s/"$//' | head -c 100)
 fi
 
-# Determine agent identifier
+# Determine agent identifier from worktree/directory path
 AGENT_NAME=""
 if [ "$IS_SUBAGENT" = true ]; then
-    # For subagents, use sequential counter
-    COUNTER_FILE="${CLAUDE_PROJECT_DIR:-.}/.agent-locks/subagent_counter"
-    if [ -f "$COUNTER_FILE" ]; then
-        SUBAGENT_NUM=$(cat "$COUNTER_FILE")
-        SUBAGENT_NUM=$((SUBAGENT_NUM + 1))
-    else
-        SUBAGENT_NUM=1
-    fi
-    echo "$SUBAGENT_NUM" > "$COUNTER_FILE"
-    AGENT_NAME="Subagent $SUBAGENT_NUM"
+    # For Claude subagents, just say "Subagent" (no counter needed)
+    AGENT_NAME="Subagent"
 else
-    # For MAW agents, detect from worktree path
+    # For MAW agents, detect from worktree path (agents/1, agents/2, agents/3)
     if [[ "$CWD" =~ agents/([0-9]+) ]]; then
-        AGENT_NAME="Multi-Agent ${BASH_REMATCH[1]}"
+        AGENT_NAME="Agent ${BASH_REMATCH[1]}"
     else
-        AGENT_NAME="Main agent"
+        AGENT_NAME="Main"
     fi
 fi
 
