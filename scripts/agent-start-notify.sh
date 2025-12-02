@@ -4,6 +4,35 @@
 
 set -euo pipefail
 
+# Get script directory for sourcing config
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Source voice configuration
+if [ -f "$SCRIPT_DIR/agent-voices.conf" ]; then
+    source "$SCRIPT_DIR/agent-voices.conf"
+else
+    # Fallback defaults
+    VOICE_MAIN="Samantha"
+    VOICE_AGENT_1="Daniel"
+    VOICE_AGENT_2="Karen"
+    VOICE_AGENT_3="Rishi"
+    VOICE_SUBAGENT="Fred"
+    VOICE_DEFAULT="Samantha"
+fi
+
+# Get voice for agent
+get_voice() {
+    local agent_name="$1"
+    case "$agent_name" in
+        *"Main"*) echo "$VOICE_MAIN" ;;
+        *"Agent 1"*) echo "$VOICE_AGENT_1" ;;
+        *"Agent 2"*) echo "$VOICE_AGENT_2" ;;
+        *"Agent 3"*) echo "$VOICE_AGENT_3" ;;
+        *subagent*|*Subagent*|*Starting*) echo "$VOICE_SUBAGENT" ;;
+        *) echo "$VOICE_DEFAULT" ;;
+    esac
+}
+
 # Read JSON input from stdin
 INPUT=$(cat)
 
@@ -74,6 +103,9 @@ fi
 
 # Speech queue - wait for any running say to finish
 if command -v say &> /dev/null; then
+    # Get voice for this agent
+    VOICE=$(get_voice "$AGENT_NAME")
+
     MESSAGE="$AGENT_NAME"
     if [ -n "$DESCRIPTION" ]; then
         # Truncate description to keep speech short
@@ -85,7 +117,7 @@ if command -v say &> /dev/null; then
         while pgrep -x "say" > /dev/null; do
             sleep 0.5
         done
-        say "$MESSAGE"
+        say -v "$VOICE" "$MESSAGE"
     ) &
 fi
 
