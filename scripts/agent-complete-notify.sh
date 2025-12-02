@@ -92,8 +92,17 @@ fi
 # Determine agent identifier from worktree/directory path
 AGENT_NAME=""
 if [ "$IS_SUBAGENT" = true ]; then
-    # For Claude subagents, just say "Subagent" (no counter needed)
-    AGENT_NAME="Subagent"
+    # For Claude subagents, extract slug from transcript for unique name
+    SLUG=""
+    if [ -n "$AGENT_TRANSCRIPT" ] && [ -f "$AGENT_TRANSCRIPT" ]; then
+        SLUG=$(head -1 "$AGENT_TRANSCRIPT" | grep -o '"slug":"[^"]*"' | sed 's/"slug":"//;s/"$//' | head -1)
+    fi
+    if [ -n "$SLUG" ]; then
+        # Convert slug to readable: "golden-marinating-bentley" -> "golden marinating bentley"
+        AGENT_NAME=$(echo "$SLUG" | tr '-' ' ')
+    else
+        AGENT_NAME="Subagent"
+    fi
 else
     # For MAW agents, detect from worktree path (agents/1, agents/2, agents/3)
     if [[ "$CWD" =~ agents/([0-9]+) ]]; then
@@ -133,12 +142,15 @@ if command -v say &> /dev/null; then
         MESSAGE="$AGENT_NAME completed"
     fi
 
-    # Queue the speech (run in background with lock)
+    # Queue the speech with mkdir lock (macOS compatible)
+    LOCK_DIR="${CLAUDE_PROJECT_DIR:-.}/.agent-locks/speech.lock.d"
     (
-        # Wait for any running say process to finish
-        while pgrep -x "say" > /dev/null; do
-            sleep 0.5
+        # Wait for lock (mkdir is atomic)
+        while ! mkdir "$LOCK_DIR" 2>/dev/null; do
+            sleep 0.3
         done
+        # Ensure lock is released on exit
+        trap "rmdir '$LOCK_DIR' 2>/dev/null" EXIT
         say -v "$VOICE" -r "$RATE" "$MESSAGE"
     ) &
 fi

@@ -136,10 +136,15 @@ if command -v say &> /dev/null; then
         MESSAGE="$AGENT_NAME: $SHORT_DESC"
     fi
 
+    # Queue the speech with mkdir lock (macOS compatible)
+    LOCK_DIR="${CLAUDE_PROJECT_DIR:-.}/.agent-locks/speech.lock.d"
     (
-        while pgrep -x "say" > /dev/null; do
-            sleep 0.5
+        # Wait for lock (mkdir is atomic)
+        while ! mkdir "$LOCK_DIR" 2>/dev/null; do
+            sleep 0.3
         done
+        # Ensure lock is released on exit
+        trap "rmdir '$LOCK_DIR' 2>/dev/null" EXIT
         say -v "$VOICE" -r "$RATE" "$MESSAGE"
     ) &
 fi
