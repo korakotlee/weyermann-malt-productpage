@@ -658,5 +658,11 @@ Ctrl+b, d              # Detach from session
 - HTML5, CSS3, JavaScript ES6+ + None (vanilla approach per constitution) (001-product-display)
 - products.json (static file, read-only) (001-product-display)
 
+## Available Subagents
+- **thai-translator**: Translate retrospectives EN → TH with natural Thai, preserving technical terms and formatting
+  - Usage: Task tool with subagent_type='thai-translator' or run from `.claude/agents/thai-translator.md`
+  - Output: Creates `_th.md` suffix version in same directory
+
 ## Recent Changes
 - 001-product-display: Added HTML5, CSS3, JavaScript ES6+ + None (vanilla approach per constitution)
+- Added thai-translator subagent for retrospective translations (issue #19)
