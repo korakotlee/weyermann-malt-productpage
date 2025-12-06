@@ -564,6 +564,7 @@ Closes #[issue-number]
 -   **001-force-push**: Safety rules are infrastructure, not guidelines - internalize them
 -   **002-golden-rule**: Distill complexity into memorable principles (complete, memorable, actionable)
 -   **003-upstream-first**: Create upstream issues instead of local patches
+-   **004-detect-before-act**: Always observe state before sending commands - "think first, see first, then decide"
 
 ### Planning & Architecture Patterns (2025-08-26)
 -   **Pattern**: Use parallel agents for analyzing different aspects of complex systems
@@ -663,6 +664,12 @@ Ctrl+b, d              # Detach from session
   - Usage: Task tool with subagent_type='thai-translator' or run from `.claude/agents/thai-translator.md`
   - Output: Creates `_th.md` suffix version in same directory
 
+- **maw-orchestrator**: Start MAW tmux session and spawn Claude/Codex agents in panes
+  - Usage: Task tool with subagent_type='maw-orchestrator' or run from `.claude/agents/maw-orchestrator.md`
+  - Spawns: Agent 1 (Claude), Agent 2 (Codex), Agent 3 (Codex)
+  - Calls `.sh` scripts directly (NOT slash commands)
+
 ## Recent Changes
 - 001-product-display: Added HTML5, CSS3, JavaScript ES6+ + None (vanilla approach per constitution)
 - Added thai-translator subagent for retrospective translations (issue #19)
+- Added maw-orchestrator subagent for starting MAW and spawning agents (issue #22)
