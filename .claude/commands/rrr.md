@@ -19,8 +19,8 @@ Execute the `rrr` workflow from CLAUDE.md:
    - Get current timestamp: `TZ='Asia/Bangkok' date +"%Y-%m-%d %H:%M"` (GMT+7)
 
 2. **Create Retrospective File**:
-   Create file at `ψ-retrospectives/YYYY-MM/DD_HH-MM_retrospective.md`
-   (e.g., `ψ-retrospectives/2025-12/06_11-30_retrospective.md`)
+   Create file at `ψ-retrospectives/YYYY-MM/DD/HH-MM_retrospective.md`
+   (e.g., `ψ-retrospectives/2025-12/06/11-30_retrospective.md`)
 
    Use this template (ALL sections required):
    ```markdown
