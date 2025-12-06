@@ -15,7 +15,8 @@ Read retrospectives from `ψ-retrospectives/` and create compelling documentatio
 
 ```bash
 # Find all retrospectives
-Glob pattern: ψ-retrospectives/**/*retrospective*.md
+Glob pattern: ψ-retrospectives/**/**/*retrospective*.md
+# Structure: ψ-retrospectives/YYYY-MM/*.md
 ```
 
 ## What You Can Create
