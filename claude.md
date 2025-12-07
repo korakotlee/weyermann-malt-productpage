@@ -116,6 +116,12 @@ A brief, high-level description of the project's purpose and goals.
 -   Always confirm before deleting files.
 -   Use safe file operations that can be reversed.
 
+### Temp File Operations
+-   **NEVER create temp files outside the repository** (e.g., `/tmp/`)
+-   **ALWAYS use `.tmp/` directory inside repo** (gitignored)
+-   Signal files, locks, caches → `.tmp/filename`
+-   Clean up temp files after use: `rm -f .tmp/filename`
+
 ### Package Manager Operations
 -   Never use `[package-manager] install --force`.
 -   Never use `[package-manager] update` without specifying packages.

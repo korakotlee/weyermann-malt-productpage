@@ -19,8 +19,8 @@ Send task to Codex, wait for file signal, return result. ~100ms latency.
 ## Script
 
 ```bash
-# 1. Setup signal file
-SIGNAL="/tmp/codex-signal-$$"
+# 1. Setup signal file (use .tmp/ inside repo, not /tmp/)
+SIGNAL=".tmp/codex-signal-$$"
 rm -f "$SIGNAL"
 
 # 2. Send task with signal instruction
@@ -56,4 +56,7 @@ Task(subagent_type="codex-communicator", prompt="Score this file out of 10")
 | File signal | ~100ms | ✓ (tested 2025-12-07) |
 | tmux wait-for | ~0ms | untested |
 
-Codex WILL execute `touch /tmp/file` after answering (tested & proven).
+Codex WILL execute `touch .tmp/file` after answering (tested & proven).
+
+## Safety Rule
+Always use `.tmp/` inside repo (gitignored), never `/tmp/` outside.

@@ -25,8 +25,8 @@ Main Agent (Claude)
 
 ### Fast Method: File Signal (~100ms latency)
 ```bash
-# 1. Setup signal file
-SIGNAL="/tmp/codex-signal-$$"
+# 1. Setup signal file (use .tmp/ inside repo, gitignored)
+SIGNAL=".tmp/codex-signal-$$"
 rm -f "$SIGNAL"
 
 # 2. Send task with signal instruction
@@ -40,7 +40,9 @@ tmux capture-pane -t ai-000-workshop-product-page:1.2 -p -S -50
 rm -f "$SIGNAL"
 ```
 
-**Proven**: Codex WILL execute `touch /tmp/file` after answering (tested 2025-12-07).
+**Proven**: Codex WILL execute `touch .tmp/file` after answering (tested 2025-12-07).
+
+**Safety**: Always use `.tmp/` inside repo (gitignored), never `/tmp/` outside.
 
 ### Slow Method: Fixed Sleep
 ```bash
