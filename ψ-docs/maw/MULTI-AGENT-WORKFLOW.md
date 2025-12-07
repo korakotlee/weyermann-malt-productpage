@@ -23,6 +23,26 @@ Main Agent (Claude)
 
 ## Commands
 
+### Fast Method: File Signal (~100ms latency)
+```bash
+# 1. Setup signal file
+SIGNAL="/tmp/codex-signal-$$"
+rm -f "$SIGNAL"
+
+# 2. Send task with signal instruction
+source .envrc && maw hey 2 "Your task here. When done, run: touch $SIGNAL"
+
+# 3. Wait for signal (fast polling)
+while [ ! -f "$SIGNAL" ]; do sleep 0.1; done
+
+# 4. Capture response
+tmux capture-pane -t ai-000-workshop-product-page:1.2 -p -S -50
+rm -f "$SIGNAL"
+```
+
+**Proven**: Codex WILL execute `touch /tmp/file` after answering (tested 2025-12-07).
+
+### Slow Method: Fixed Sleep
 ```bash
 # Send task to Codex
 source .envrc && maw hey 2 "Your task here"
@@ -32,8 +52,6 @@ sleep 10  # Adjust based on task complexity
 
 # Capture response
 tmux capture-pane -t ai-000-workshop-product-page:1.2 -p -S -50
-
-# Parse the output and use it
 ```
 
 ## Agent Roles
@@ -96,11 +114,19 @@ OUTPUT=$(tmux capture-pane -t ai-000-workshop-product-page:1.2 -p -S -50)
 
 ## Tips
 
-1. **Be specific** - Clear task descriptions get better results
-2. **Wait enough** - Complex tasks need more time
-3. **Capture more lines** - Use `-S -50` or `-S -100` for long output
-4. **Parse carefully** - Codex output has formatting, extract the useful parts
+1. **Use file signals** - ~100ms latency vs 10s+ fixed sleep
+2. **Be specific** - Clear task descriptions get better results
+3. **Include signal instruction** - "When done, run: touch /tmp/signal"
+4. **Capture more lines** - Use `-S -50` or `-S -100` for long output
 5. **Iterate** - Send follow-up tasks for refinement
+
+## Latency Comparison
+
+| Method | Latency | Reliability |
+|--------|---------|-------------|
+| Fixed sleep | 10-20s | ✓ Always works |
+| File signal | ~100ms | ✓ Proven (Codex executes touch) |
+| tmux wait-for | ~0ms | ? Untested |
 
 ## Quick Reference
 
