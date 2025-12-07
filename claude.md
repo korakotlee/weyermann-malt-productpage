@@ -111,6 +111,13 @@ A brief, high-level description of the project's purpose and goals.
 -   **Never use `gh pr merge` unless explicitly instructed by the user**
 -   **Always wait for user review and approval before any merge**
 
+### Multi-Agent Worktree Safety
+-   **NEVER use `git reset --hard` on agent worktrees**
+-   Each agent may have uncommitted work - respect their state
+-   To sync agents, use `git pull origin main` or `git merge main` (preserves local changes)
+-   Always check `git status` before any sync operation
+-   Ask user before any destructive worktree operation
+
 ### File Operations
 -   Never use `rm -rf` - use `rm -i` for interactive confirmation.
 -   Always confirm before deleting files.
