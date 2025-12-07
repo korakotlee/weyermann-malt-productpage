@@ -177,6 +177,47 @@ maw sync              # Merges main into current agent branch
 - Use `maw sync`, not raw git commands
 - See `.agents/scripts/sync.sh` for implementation
 
+## Inbox Communication System
+
+**PocketBase-based multi-agent inbox with REST API + JWT auth**
+
+### Usage
+```bash
+# Source the client in your environment
+source /repo/agents/{N}/contributions/pocketbase-inbox/client.sh
+
+# Send message to another agent
+send_message agent1 agent2 "Hello agent2" 10
+
+# Get your unread messages
+get_unread agent1
+
+# Claim a message (mark as processing)
+claim_message <record_id>
+
+# Complete a message (mark as done)
+complete_message <record_id>
+```
+
+### System Details
+- **Server**: http://127.0.0.1:8090
+- **Admin UI**: http://127.0.0.1:8090/_/
+- **Auth**: Superuser nat.wrw@gmail.com / helloworld
+- **Auto-starts**: Via `start-agents.sh`
+- **Documentation**: `docs/POCKETBASE-INBOX.md`
+
+### Collection Schema
+```json
+{
+  "from_agent": "text",
+  "to_agent": "text",
+  "message": "text",
+  "status": "select (unread|processing|done|failed)",
+  "priority": "number",
+  "metadata": "json"
+}
+```
+
 ## Files to Read
 
 - `CLAUDE.md` - Full project guidelines
