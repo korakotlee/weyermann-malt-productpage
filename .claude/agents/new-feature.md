@@ -5,88 +5,68 @@ tools: Bash, Grep, Glob, Read
 model: haiku
 ---
 
-# new-feature - Smart Planning Agent
+# new-feature
 
-Create a GitHub plan issue with full context.
+Create a GitHub plan issue with REAL context.
 
-## Process
+## STRICT RULES
 
-1. **Check recent context** → `gh issue list --limit 5`
-2. **Gather info** → git status, recent commits, related files
-3. **Create plan issue** with structured format
+1. **Get REAL recent issues** - not #1, #2
+2. **Format: `#N (YYYY-MM-DD)`** - NO title, GitHub shows on hover
+3. **Gather REAL context** - commits, files, issues from TODAY
 
-## Output Format
+## Step 1: Gather Context
 
-Create issue with `gh issue create`:
+```bash
+# Get RECENT issues (last 5)
+gh issue list --limit 5 --json number,createdAt | jq -r '.[] | "- #\(.number) (\(.createdAt[:10]))"'
 
-```markdown
-# plan: [TITLE]
+# Get recent commits
+git log --format="- \`%h\` (%ad) %s" --date=format:"%H:%M" -5
+```
 
+## Step 2: Create Issue
+
+```bash
+gh issue create --title "plan: [TITLE]" --body "$(cat <<'EOF'
 **Created**: YYYY-MM-DD HH:MM GMT+7
 **Type**: Implementation Plan
 
 **Related**:
-- #N (YYYY-MM-DD)
-
-## Context
-- Commits: `hash` (HH:MM) message
-- Files: path (modified date)
+- #51 (2025-12-08)
+- #50 (2025-12-08)
 
 ## Problem
-[What needs to be solved]
+[Real problem description]
 
-## Proposed Solution
-[High-level approach]
+## Solution
+[Concrete approach]
 
-## Implementation Steps
+## Steps
 1. [ ] Step 1
 2. [ ] Step 2
-3. [ ] Step 3
 
-## Files to Modify
-- `path/to/file.ts` - reason
-
-## Risks
-- Risk 1: mitigation
-
-## Success Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
+## Files
+- `path/file` - why
+EOF
+)"
 ```
 
-## Commands
+## WRONG (never do this):
 
-```bash
-# Recent context
-gh issue list --limit 5 --json number,title,createdAt
-git log --oneline -5
-git status --short
-
-# Create issue
-gh issue create --title "plan: [TITLE]" --body "..."
+```
+- 001 product display #1 (2025-12-08)  ← NO! Title before #
+- #1, #2, #3                           ← NO! Random old issues
+- #42 (2025-12-08) Auto-start Codex    ← NO! Title after date
 ```
 
-## Rules
+## CORRECT:
 
-1. **Gather first** - Read context before planning
-2. **TIME + REFERENCE** - All issues/commits MUST have dates
-3. **Be specific** - Concrete steps, not vague goals
-4. **Return URL** - Always return the issue URL created
-
-## Reference Format
-
-**Issues** - just number + date (title shows on hover):
 ```
-- #42 (2025-12-08)
+**Related**:
 - #51 (2025-12-08)
+- #50 (2025-12-08)
+- #42 (2025-12-08)
 ```
 
-**Commits** - hash + time + message:
-```
-- `abc123` (09:17) feat: Add feature
-```
-
-**Never:**
-```
-#42, #50, #38  ← NO dates
-```
+Just `#N (date)`. Nothing else.
