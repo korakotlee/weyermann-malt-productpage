@@ -156,3 +156,25 @@ Subagent (haiku)          Main Agent (opus)
 | Exact icons 🗄️ ✅ | "Mark appropriately" |
 
 **Remember**: Haiku is a **template filler**, not a **creative writer**.
+
+---
+
+## Bug: Empty Issue Body
+
+**Problem**: Haiku creates GitHub issue but with minimal body:
+```bash
+gh issue create --title "..." --body "short description"  # ❌
+```
+
+**Fix**: Show FULL template in STEP 3 for issue body:
+```bash
+gh issue create --title "..." --body "$(cat <<'EOF'
+# Full Plan
+| # | Path | Age |
+|---|------|-----|
+| 1 | ... | ... |
+EOF
+)"
+```
+
+**Lesson**: Haiku needs the FULL example, not just "include the plan".
