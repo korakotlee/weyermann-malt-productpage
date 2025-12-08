@@ -750,6 +750,16 @@ Ctrl+b, d              # Detach from session
   - Spawns: Agent 1 (Claude), Agent 2 (Codex), Agent 3 (Codex)
   - Calls `.sh` scripts directly (NOT slash commands)
 
+- **issues-cleanup**: Analyze GitHub issues, find stale/duplicate/orphaned, create cleanup plan
+  - Usage: Task tool with subagent_type='issues-cleanup'
+  - Finds: duplicates, test issues, stale closed, completed plans
+  - Output: Cleanup plan issue (never auto-closes)
+
+- **new-feature**: Create implementation plan issues with context gathering
+  - Usage: Task tool with subagent_type='new-feature'
+  - Format: `#N (YYYY-MM-DD)` sorted by issue number
+  - Output: GitHub plan issue with related context
+
 ## Recent Changes
 - 001-product-display: Added HTML5, CSS3, JavaScript ES6+ + None (vanilla approach per constitution)
 - Added thai-translator subagent for retrospective translations (issue #19)
