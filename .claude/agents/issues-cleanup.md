@@ -145,11 +145,69 @@ gh issue close M --comment "Cleanup: [reason]"
 
 ---
 
+## STEP 6: LOG & REPORT (after execution)
+
+### 6a: Create/Update Daily Events Log
+```bash
+# Create directory if needed
+mkdir -p "ψ-logs/$(date +%Y-%m)/$(date +%d)"
+
+# Append to events.md
+EVENT_FILE="ψ-logs/$(date +%Y-%m)/$(date +%d)/events.md"
+TIME=$(TZ='Asia/Bangkok' date +"%H:%M")
+
+# If file doesn't exist, create header
+if [ ! -f "$EVENT_FILE" ]; then
+  echo "# Events: $(date +%Y-%m-%d)" > "$EVENT_FILE"
+  echo "" >> "$EVENT_FILE"
+  echo "| Time | Type | Action | Reference |" >> "$EVENT_FILE"
+  echo "|------|------|--------|-----------|" >> "$EVENT_FILE"
+fi
+
+# Append cleanup event
+echo "| $TIME | cleanup | Closed #X, #Y, #Z | #[PLAN_NUMBER] |" >> "$EVENT_FILE"
+```
+
+### 6b: Update Cleanup Plan Issue
+```bash
+gh issue comment [PLAN_NUMBER] --body "$(cat <<'EOF'
+## ✅ Cleanup Completed
+
+**Time**: [HH:MM] GMT+7
+
+### Closed
+- #X - [reason]
+- #Y - [reason]
+- #Z - [reason]
+
+### Kept
+- #A, #B, #C (active)
+
+### Event Log
+→ `ψ-logs/YYYY-MM/DD/events.md`
+EOF
+)"
+```
+
+### 6c: Commit Events Log
+```bash
+git add "ψ-logs/"
+git commit -m "log: Issues cleanup - closed #X, #Y, #Z"
+```
+
+---
+
 ## VALIDATION
 
-Before finishing:
+### After PLAN (Step 5):
 - [ ] All issues analyzed (open + closed)
 - [ ] Categorized by type
 - [ ] GitHub issue CREATED with plan
 - [ ] Issue NUMBER and URL returned
 - [ ] Close candidates listed with reasons
+
+### After EXECUTE (Step 6):
+- [ ] Issues closed with comments
+- [ ] Events log updated (`ψ-logs/YYYY-MM/DD/events.md`)
+- [ ] Cleanup plan issue updated with completion
+- [ ] Events log committed to git
