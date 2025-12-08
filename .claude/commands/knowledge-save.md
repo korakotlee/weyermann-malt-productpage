@@ -6,8 +6,8 @@ Quick capture of session work. Layer 1: Raw data with full traceability.
 
 1. Gather context:
 ```bash
-# Get recent commits
-git log --oneline -5
+# Get recent commits with timestamps (GMT+7)
+git log --format="%h %ad %s" --date=format:"%H:%M" -10
 
 # Get current branch
 git branch --show-current
@@ -31,7 +31,9 @@ mkdir -p "ψ-logs/$(date +%Y-%m)/$(date +%d)"
 
 ## 🔗 Context Links
 - **Issues**: #XX, #YY
-- **Commits**: `abc123`, `def456`
+- **Commits**:
+  - `abc123` HH:MM - commit message
+  - `def456` HH:MM - commit message
 - **Branch**: [branch-name]
 - **Tags**: `tag1` `tag2` `tag3`
 
