@@ -26,7 +26,7 @@ Create issue with `gh issue create`:
 **Type**: Implementation Plan
 
 **Related**:
-- #N (YYYY-MM-DD) short title
+- #N (YYYY-MM-DD)
 
 ## Context
 - Commits: `hash` (HH:MM) message
@@ -75,14 +75,18 @@ gh issue create --title "plan: [TITLE]" --body "..."
 
 ## Reference Format
 
-**Always include time:**
+**Issues** - just number + date (title shows on hover):
 ```
-#42 (2025-12-08) Auto-start Codex
-`abc123` (09:17) feat: Add feature
-path/file.md (2025-12-08)
+- #42 (2025-12-08)
+- #51 (2025-12-08)
 ```
 
-**Never just:**
+**Commits** - hash + time + message:
 ```
-#42, #50, #38  ← NO! Missing dates
+- `abc123` (09:17) feat: Add feature
+```
+
+**Never:**
+```
+#42, #50, #38  ← NO dates
 ```
