@@ -28,7 +28,7 @@ Search and return **TIME + REFERENCE** for all results.
 path (YYYY-MM-DD HH:MM)
 
 ---
-📊 ~X results | ~Y tokens
+📊 results: X | in: ~Yk | out: ~Zk | tools: N
 ```
 
 ## Commands
@@ -36,11 +36,12 @@ path (YYYY-MM-DD HH:MM)
 ```bash
 git log --format="%h (%ad) %s" --date=format:"%H:%M" -15
 gh issue list --limit 10 --json number,title,createdAt
-
-# Token estimate (~4 chars = 1 token)
-wc -c file.md | awk '{print int($1/4)}'
 ```
 
-## Token Counting
+## Token Tracking
 
-Count your output characters, estimate: `chars / 4 = tokens`
+Track and report:
+- **results**: count of items found
+- **in**: input tokens (tool results read, estimate `chars/4`)
+- **out**: output tokens (your response `chars/4`)
+- **tools**: number of tool calls made
