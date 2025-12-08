@@ -736,6 +736,16 @@ Ctrl+b, d              # Detach from session
 - products.json (static file, read-only) (001-product-display)
 
 ## Available Subagents
+- **context-finder**: Fast search through git history, retrospectives, issues, and codebase
+  - Usage: Task tool with subagent_type='context-finder'
+  - Returns: File paths + excerpts for main agent to read
+  - Model: haiku (fast)
+
+- **archiver**: Carefully search, find unused items, group by topic, prepare archive plan
+  - Usage: Task tool with subagent_type='archiver'
+  - Topics: retrospectives, issues, docs, agents, profiles
+  - Output: Archive report with recommendations (never auto-deletes)
+
 - **thai-translator**: Translate retrospectives EN → TH with natural Thai, preserving technical terms and formatting
   - Usage: Task tool with subagent_type='thai-translator' or run from `.claude/agents/thai-translator.md`
   - Output: Creates `_th.md` suffix version in same directory
