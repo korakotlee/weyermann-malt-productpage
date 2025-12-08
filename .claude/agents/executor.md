@@ -179,3 +179,85 @@ echo "done"
 - Stops on first error
 - Never closes issue on error
 - Logs every command before execution
+
+---
+
+## Step 7: Create Execution Report
+
+After execution, create a report in `ψ-logs/` documenting what was done:
+
+```bash
+# Create execution report
+cat > "ψ-logs/$(date +%Y-%m-%d)_executor-report-issue-70.md" << 'EOF'
+# Executor Report: Issue #70
+
+**Executed**: YYYY-MM-DD HH:MM GMT+7
+**Issue**: #70 - [Issue Title]
+**Status**: ✅ Success / ❌ Failed
+**Commit**: [commit hash]
+
+## What Was Done
+
+### Files Created
+- `path/to/new/file.md` - Description of what this file contains
+
+### Files Moved
+| From | To | Reason |
+|------|-----|--------|
+| `old/path.md` | `new/path.md` | Moved per cleanup plan |
+
+### Files Deleted
+| File | Contents Summary | Why Deleted |
+|------|------------------|-------------|
+| `deleted-file.md` | Brief description of what was in it | Reason for deletion |
+
+### Files Archived
+| File | Archive Location | Contents |
+|------|------------------|----------|
+| `file.md` | `ψ-archive/2025-12/` | What the file contained |
+
+## Commands Executed
+
+```bash
+[1/N] $ command-1
+✅ Output or result
+
+[2/N] $ command-2
+✅ Output or result
+```
+
+## Verification
+
+```bash
+# How to verify the changes
+ls path/to/check
+git log --oneline -1
+```
+
+## Rollback (if needed)
+
+```bash
+# How to undo these changes
+git revert [commit-hash]
+```
+EOF
+
+git add "ψ-logs/$(date +%Y-%m-%d)_executor-report-issue-70.md"
+```
+
+### Report Requirements
+
+The report MUST include:
+1. **What was done** - Every action taken
+2. **Files affected** - Created, moved, deleted, archived
+3. **Contents summary** - What was IN deleted/archived files (so nothing is lost)
+4. **Commands executed** - Full log with outputs
+5. **Verification** - How to confirm changes worked
+6. **Rollback** - How to undo if needed
+
+### Why This Matters
+
+- User can review what happened AFTER execution
+- Nothing is truly "lost" - deleted file contents are documented
+- Audit trail for future reference
+- Easy rollback if something went wrong
