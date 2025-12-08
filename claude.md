@@ -325,11 +325,36 @@ cat > "ψ-retrospectives/${YEAR_MONTH}/${DAY}/${TIME_DOT}_retrospective.md" << E
 ## Session Summary
 [2-3 sentence overview of what was accomplished]
 
+## 🏷️ Tags
+<!-- For context-finder searchability - add relevant keywords -->
+`tag1` `tag2` `tag3` `feature-name` `component-name`
+
+## 📎 Linked Issues
+<!-- All issues touched this session - enables future tracing -->
+| Issue | Role | Status at End |
+|-------|------|---------------|
+| #XXX | Primary focus | In Progress |
+| #XXX | Context source | Closed |
+| #XXX | Created this session | Open |
+| #XXX | Related | Open |
+
+## 📝 Commits This Session
+<!-- Auto-generate with: git log --oneline main..HEAD or last N commits -->
+```bash
+# Run: git log --oneline -10 --since="YYYY-MM-DD"
+```
+- `abc1234` feat: Description of change
+- `def5678` fix: Another change
+- `ghi9012` docs: Documentation update
+
 ## Timeline
-- HH:MM - Started session, reviewed issue #XXX
-- HH:MM - [Event]
-- HH:MM - [Event]
-- HH:MM - Completed implementation
+<!-- Precise timestamps with commit/issue references -->
+| Time (GMT+7) | Event | Reference |
+|--------------|-------|-----------|
+| HH:MM | Started session, reviewed context | from #XXX |
+| HH:MM | [Milestone 1] | `abc1234` |
+| HH:MM | [Milestone 2] | `def5678` |
+| HH:MM | Created retrospective | → #XXX |
 
 ## Technical Details
 
@@ -475,13 +500,24 @@ Good: "You → Me: 'Consult subagents for large analysis' — discovered when se
 - [ ] Future consideration
 
 ## Related Resources
-- Issue: #XXX
-- PR: #XXX
-- Export: [session_YYYY-MM-DD_HH-MM.md](../exports/session_YYYY-MM-DD_HH-MM.md)
+<!-- Cross-reference for future context-finder searches -->
+- **Primary Issue**: #XXX (link to main focus)
+- **Context Issue**: #XXX (if created via ccc)
+- **Plan Issue**: #XXX (if created via nnn)
+- **PR**: #XXX (if created)
+- **Previous Session**: [YYYY-MM-DD retrospective](../path/to/previous.md)
+- **Next Steps Issue**: #XXX (created for continuation)
 
 ## ✅ Pre-Save Validation (REQUIRED)
 Fill in blanks as PROOF (can't save with blanks):
 
+### Traceability (NEW)
+- [ ] **Tags**: _____ tags added (min 3 for searchability)
+- [ ] **Linked Issues**: _____ issues linked (min 1 primary focus)
+- [ ] **Commits**: _____ commits listed (or "none" if no commits)
+- [ ] **Timeline**: _____ entries with references (commits/issues)
+
+### Quality Checks
 - [ ] **AI Diary**: 🤔(_) 😕(_) 😮(_) emojis found, _____ words total
 - [ ] **Honest Feedback**: 🔴"_____" 🟡"_____" 🟢"_____" (first 5 words of each)
 - [ ] **Communication Dynamics**: Examples filled: You→Me(_) Me→You(_)
