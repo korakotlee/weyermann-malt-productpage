@@ -77,8 +77,19 @@ After executor creates PR:
    - Report completion with link
 ```
 
+### 7. Auto-Close Issues
+
+PR body must include closing keyword to auto-close the plan issue:
+
+```markdown
+Closes #78
+```
+
+Or in commit message. Without this, issue stays open after merge.
+
 ## Anti-Patterns
 
+- ❌ PR without `Closes #N` keyword (issue stays open)
 - ❌ Main agent running bash commands directly
 - ❌ Main agent reading files to verify (delegate!)
 - ❌ Main agent doing `gh pr merge`
