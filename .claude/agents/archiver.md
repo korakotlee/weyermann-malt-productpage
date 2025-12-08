@@ -106,18 +106,31 @@ EOF
 )"
 ```
 
-### STEP 4: Return the issue link
+### STEP 4: Return issue link + file list for verification
 
-After creating the issue, output:
+After creating the issue, output this EXACT format:
 
 ```
 ✅ Archive plan created!
 
-📋 Issue: #[NUMBER] - [TITLE]
-🔗 Link: [GITHUB_URL]
+📋 Issue: #[NUMBER]
+🔗 [GITHUB_URL]
 
-Tell me: `archive #1`, `info #2`, or `skip`
+## Files Found (for main agent to verify)
+COUNT: [N] files
+
+PATHS:
+1. [exact/path/to/file1.md]
+2. [exact/path/to/file2.sh]
+...
+
+## Quick Actions
+- `archive all` - Archive all [N] files
+- `info #1` - Details on file 1
+- `skip` - Cancel
 ```
+
+**WHY**: Main agent will verify COUNT matches, not re-list files. Saves tokens!
 
 ---
 
@@ -155,11 +168,12 @@ grep -r "[FILENAME]" . --include="*.md" -l
 
 Before finishing:
 - [ ] All items numbered (#1, #2, etc.)
-- [ ] Each item has: path, age, refs, recommendation
-- [ ] "Next Actions" section included
-- [ ] Summary numbers match table
-- [ ] **GitHub issue CREATED** (not just planned!)
-- [ ] Issue link returned to user
+- [ ] Each item has: FULL PATH, age, refs, recommendation
+- [ ] GitHub issue CREATED with `gh issue create`
+- [ ] Issue NUMBER and URL returned
+- [ ] COUNT: N files - exact number
+- [ ] PATHS: listed with full paths (main agent will verify count)
+- [ ] Quick Actions section included
 
 ---
 
