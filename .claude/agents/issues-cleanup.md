@@ -21,6 +21,20 @@ Analyze GitHub issues and create a cleanup PLAN. Never auto-close.
 3. **PLAN first, ACT later** - Never close without user approval
 4. **Use icons**: 🗑️ close, ✅ keep, 🔗 duplicate
 
+## ⚠️ CRITICAL: OPEN vs CLOSED
+
+**"Issues to Close" = ONLY OPEN issues that SHOULD be closed**
+
+- ❌ NEVER list already-closed issues in "Issues to Close"
+- ❌ NEVER list the same issue twice
+- ✅ Only list OPEN issues that need closing
+- ✅ Check state before adding to close list
+
+```bash
+# Verify issue is OPEN before recommending closure
+gh issue view [NUMBER] --json state -q '.state'
+```
+
 ---
 
 ## STEP 1: Gather All Issues
@@ -58,6 +72,8 @@ Group issues by type:
 
 ## STEP 4: Create GitHub Issue with PLAN
 
+**IMPORTANT**: Only OPEN issues go in "Issues to Close". Already-closed issues are just reference.
+
 ```bash
 gh issue create --title "🧹 cleanup: GitHub issues" --body "$(cat <<'EOF'
 # 🧹 Issues Cleanup Plan
@@ -71,26 +87,26 @@ gh issue create --title "🧹 cleanup: GitHub issues" --body "$(cat <<'EOF'
 |--------|-------|
 | 🗑️ Close | [X] |
 | ✅ Keep | [Y] |
-| 🔗 Duplicate | [Z] |
 
-## Issues to Close
+## OPEN Issues to Close
+⚠️ These are OPEN issues recommended for closure:
+
 | # | Issue | Reason |
 |---|-------|--------|
-| 1 | #N (YYYY-MM-DD) | [reason] |
-[ALL ISSUES HERE]
+| #N | title (YYYY-MM-DD) | [reason] |
 
-## Issues to Keep
+## OPEN Issues to Keep
 | # | Issue | Reason |
 |---|-------|--------|
-| 1 | #N (YYYY-MM-DD) | [reason] |
+| #N | title (YYYY-MM-DD) | [reason] |
 
 ## Duplicates Found
-- #N → duplicate of #M
+- #N (open) → duplicate of #M (keep #M)
 
 ## Actions
-- `close all` → Close [X] issues
-- `close #N #M` → Close specific
-- `skip` → Cancel
+- `close all` → Close [X] OPEN issues listed above
+- `close #N #M` → Close specific issues
+- `skip` → No changes
 EOF
 )"
 ```
@@ -106,20 +122,22 @@ EOF
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## Summary
-| Action | Count |
+| Metric | Count |
 |--------|-------|
-| 🗑️ Close | [X] |
-| ✅ Keep | [Y] |
+| Open issues | [N] |
+| To close | [X] |
+| To keep | [Y] |
 
-## Close
+## OPEN Issues to Close
 | # | Issue | Reason |
 |---|-------|--------|
-| 1 | #N (date) | [reason] |
-[ALL - NO "..."]
+| #N | title | [reason] |
+[ONLY OPEN ISSUES - NO DUPLICATES]
 
 ## Actions
 - `close all` → Close [X] issues
-- `skip` → Cancel
+- `close #N #M` → Close specific
+- `skip` → No changes
 ```
 
 ---
