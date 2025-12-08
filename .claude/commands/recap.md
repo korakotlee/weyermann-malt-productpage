@@ -1,6 +1,6 @@
 # /recap - Fresh Start Context Summary
 
-Quick catch-up for when you're starting a fresh session. Prioritizes what changed most recently.
+Quick catch-up for when you're starting a fresh session. Prioritizes what changed most recently with importance scoring.
 
 ## Usage
 
@@ -8,17 +8,33 @@ Quick catch-up for when you're starting a fresh session. Prioritizes what change
 /recap    # Get caught up on recent context
 ```
 
-## What You Get (Tiered by Value)
+## What You Get (Tiered & Scored)
 
 ### Tier 1: File Changes (Most Valuable)
 - Recently modified files with timestamps
-- What changed in each file (summary)
+- **Score** based on importance (type + recency + impact)
 - Uncommitted working state
 
 ### Tier 2: Context & Planning
 - Recent commits with messages
 - Active plan issues
 - Latest retrospectives
+
+## Scoring System
+
+| Factor | Weight | Description |
+|--------|--------|-------------|
+| Recency | +3 | < 1 hour ago |
+| Recency | +2 | < 4 hours ago |
+| Recency | +1 | < 24 hours ago |
+| Type | +3 | Code files (.ts, .js, .go, .py) |
+| Type | +2 | Agent/command files (.claude/) |
+| Type | +1 | Docs (.md outside ψ-*) |
+| Type | +0 | Logs/retros (ψ-*/) |
+| Impact | +2 | Core files (CLAUDE.md, package.json) |
+| Impact | +1 | Config files |
+
+**Score interpretation**: 6+ = Critical, 4-5 = Important, 2-3 = Notable, 0-1 = Background
 
 ## Action
 
@@ -27,7 +43,7 @@ Use the Task tool with:
 subagent_type: context-finder
 model: haiku
 prompt: |
-  Run DEFAULT MODE with TIERED OUTPUT format.
+  Run DEFAULT MODE with TIERED + SCORED OUTPUT.
 
   Run these commands:
   1. git log --since="24 hours ago" --format="COMMIT:%h|%ar|%s" --name-only
@@ -36,31 +52,40 @@ prompt: |
   4. gh issue list --limit 10 --state all --json number,title,createdAt --jq '.[] | select(.title | test("plan:")) | "#\(.number) (\(.createdAt | split("T")[0])) \(.title)"' | head -5
   5. ls -t ψ-retrospectives/**/*.md 2>/dev/null | head -3
 
+  SCORING RULES (calculate for each file):
+  - Recency: <1h = +3, <4h = +2, <24h = +1
+  - Type: .ts/.js/.go/.py = +3, .claude/* = +2, .md (not ψ-) = +1, ψ-* = +0
+  - Impact: CLAUDE.md/package.json = +2, config = +1
+  - Score 6+ = 🔴, 4-5 = 🟠, 2-3 = 🟡, 0-1 = ⚪
+
   Output EXACTLY like this:
 
   ## 🔴 TIER 1: File Changes (Last 24h)
 
-  | When | Files | Change |
-  |------|-------|--------|
-  | [from %ar] | [files] | [commit message] |
+  | Score | When | File | Change |
+  |-------|------|------|--------|
+  | 🔴 7 | 5 min ago | src/index.ts | feat: Add new feature |
+  | 🟠 5 | 1h ago | .claude/agents/foo.md | fix: Agent prompt |
+  | 🟡 3 | 3h ago | README.md | docs: Update readme |
+  | ⚪ 1 | 6h ago | ψ-retrospectives/... | docs: Retrospective |
 
   ### Working State
-  [git status output or "Clean"]
+  [git status output or "Clean - no uncommitted changes"]
 
   ---
 
   ## 🟡 TIER 2: Context
 
-  ### Commits
-  [from git log -10]
+  ### Commits (Last 10)
+  `hash` (date time) message
 
-  ### Plans
-  [from gh issue list]
+  ### Active Plans
+  #N (date) title
 
-  ### Retrospectives
-  [paths with Focus extracted]
+  ### Recent Retrospectives
+  - path - Focus: [extracted]
 
   ---
 
-  **Summary**: [1 sentence about current momentum]
+  **Summary**: [1 sentence focusing on highest-scored changes]
 ```
