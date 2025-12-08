@@ -637,6 +637,16 @@ Closes #[issue-number]
 -   **Pattern: Shell compatibility checklist** - Document which shells are used, test functions in each, prefer simple commands over abstractions
 -   **Related docs**: ψ-retrospectives/2025-12/08/08.15_warp-agent-fixes.md (best practices, DO/DON'T examples)
 
+### PocketBase Multi-Agent Orchestration (2025-12-08)
+-   **Pattern: Claude for design, Codex for implementation** - Claude completes design tasks in ~30s, Codex takes ~2-3min for code. Natural division of labor by model strength.
+-   **Pattern: Signal files for completion detection** - `.tmp/agent{N}-done` pattern works reliably across tmux windows. All agent worktrees share the same `.tmp/` directory.
+-   **Pattern: 4-phase architecture** - Breaking work into Registration → Task Queue → Dashboard → Orchestration provides clear progress tracking and allows partial completion.
+-   **Anti-Pattern: No retry for Codex disconnects** - "stream disconnected before completion" errors can kill multiple agents simultaneously. Need automatic retry wrapper.
+-   **Discovery: Claude agents need "push"** - Claude agents sometimes wait at permission prompt after task injection. Send Enter key via `tmux send-keys` to trigger execution.
+-   **Pattern: Upsert for idempotent operations** - `FindFirstRecordByFilter` + `NewRecord` fallback ensures registration is safe to call multiple times.
+-   **Lesson: 85% completion acceptable** - When Codex disconnects, proceed with partial results rather than blocking. Demo value over perfection.
+-   **Related docs**: ψ-retrospectives/2025-12/08/14.00_pocketbase-5agent-orchestration.md, agents/5/contributions/DEMO-REPORT.md
+
 ### Planning & Architecture Patterns (2025-08-26)
 -   **Pattern**: Use parallel agents for analyzing different aspects of complex systems
 -   **Anti-Pattern**: Creating monolithic plans that try to implement everything at once
