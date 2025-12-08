@@ -40,7 +40,6 @@ This document provides comprehensive guidelines for an AI assistant working on a
 -   `rrr` - Full retrospective → `ψ-retrospectives/` (Layer 3: Narrative for book)
 -   `/recap` - Fresh start context summary (tiered + scored)
 
-
 ## Quick Start Guide
 
 ### Prerequisites
@@ -150,8 +149,6 @@ A brief, high-level description of the project's purpose and goals.
 -   Use verbose options to show what commands are doing.
 
 ## Development Environment
-
-
 
 ### Environment Variables
 *(This section should be customized for the project)*
@@ -289,7 +286,6 @@ This separation ensures a clear distinction between context dumps and actionable
 -   **PRIMARY TIME ZONE: [Your Time Zone]** - Always show the primary time zone first.
 -   UTC time can be included for reference (e.g., in parentheses).
 -   Filenames may use UTC for technical consistency.
-
 
 **Step 3: Create Retrospective Document**
 ```bash
@@ -765,14 +761,14 @@ Ctrl+b, d              # Detach from session
   - Topics: retrospectives, issues, docs, agents, profiles
   - Output: Archive report with recommendations (never auto-deletes)
 
+- **maw**: 🎛️ Unified Multi-Agent Workflow controller
+  - Usage: Task tool with subagent_type='maw' with prompt "maw start|status|send|stop"
+  - Commands: start (spawn agents), status (monitor), send (communicate), stop (cleanup)
+  - Output: Unified interface for all MAW operations
+
 - **thai-translator**: Translate retrospectives EN → TH with natural Thai, preserving technical terms and formatting
   - Usage: Task tool with subagent_type='thai-translator' or run from `.claude/agents/thai-translator.md`
   - Output: Creates `_th.md` suffix version in same directory
-
-- **maw-orchestrator**: Start MAW tmux session and spawn Claude/Codex agents in panes
-  - Usage: Task tool with subagent_type='maw-orchestrator' or run from `.claude/agents/maw-orchestrator.md`
-  - Spawns: Agent 1 (Claude), Agent 2 (Codex), Agent 3 (Codex)
-  - Calls `.sh` scripts directly (NOT slash commands)
 
 - **issues-cleanup**: Analyze GitHub issues, find stale/duplicate/orphaned, create cleanup plan
   - Usage: Task tool with subagent_type='issues-cleanup'
