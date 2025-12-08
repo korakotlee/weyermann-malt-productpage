@@ -60,6 +60,52 @@ Group issues by type:
 - **test:** - Test issues (can close)
 - **other** - Uncategorized
 
+## STEP 2.5: Check References (Context Search)
+
+Before recommending closure, check if issue is referenced:
+
+```bash
+# For each candidate issue #N, count references:
+
+# 1. Retrospectives
+RETRO_REFS=$(grep -rl "#N" ψ-retrospectives/ 2>/dev/null | wc -l | tr -d ' ')
+
+# 2. Learnings
+LEARN_REFS=$(grep -rl "#N" ψ-learnings/ 2>/dev/null | wc -l | tr -d ' ')
+
+# 3. Logs
+LOG_REFS=$(grep -rl "#N" ψ-logs/ 2>/dev/null | wc -l | tr -d ' ')
+
+# 4. Git commits
+COMMIT_REFS=$(git log --all --oneline --grep="#N" 2>/dev/null | wc -l | tr -d ' ')
+
+# Total references
+TOTAL=$((RETRO_REFS + LEARN_REFS + LOG_REFS + COMMIT_REFS))
+```
+
+### Reference Decision Matrix
+
+| Total Refs | Decision | Reason |
+|------------|----------|--------|
+| 0 | 🗑️ Safe to close | No references anywhere |
+| 1-2 | ⚠️ Review first | Has some references |
+| 3+ | ✅ Keep | Well-referenced, valuable |
+
+### Add Reference Count to Output
+
+In "Issues to Close" table, add refs column:
+
+```
+| # | Issue | Refs | Reason |
+|---|-------|------|--------|
+| #N | title | 0 | No references found |
+```
+
+### Skip Reference Check For:
+- `test:` issues → always safe to close
+- `snapshot:` issues → check refs (may be valuable)
+- `archive:` issues → check if completed
+
 ## STEP 3: Identify Cleanup Targets
 
 | Category | Criteria | Action |
@@ -91,9 +137,9 @@ gh issue create --title "🧹 cleanup: GitHub issues" --body "$(cat <<'EOF'
 ## OPEN Issues to Close
 ⚠️ These are OPEN issues recommended for closure:
 
-| # | Issue | Reason |
-|---|-------|--------|
-| #N | title (YYYY-MM-DD) | [reason] |
+| # | Issue | Refs | Reason |
+|---|-------|------|--------|
+| #N | title (YYYY-MM-DD) | 0 | [reason] |
 
 ## OPEN Issues to Keep
 | # | Issue | Reason |
@@ -129,10 +175,10 @@ EOF
 | To keep | [Y] |
 
 ## OPEN Issues to Close
-| # | Issue | Reason |
-|---|-------|--------|
-| #N | title | [reason] |
-[ONLY OPEN ISSUES - NO DUPLICATES]
+| # | Issue | Refs | Reason |
+|---|-------|------|--------|
+| #N | title | 0 | [reason] |
+[ONLY OPEN ISSUES WITH 0-2 REFS - NO DUPLICATES]
 
 ## Actions
 - `close all` → Close [X] issues
