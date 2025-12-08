@@ -1,5 +1,5 @@
 ---
-description: Create context issue AND session log in one command
+description: Capture session knowledge with descriptive filename
 allowed-tools:
   - Bash
   - Read
@@ -7,137 +7,106 @@ allowed-tools:
   - Glob
 ---
 
-# /snapshot - Unified Session Capture
+# /snapshot - Knowledge Capture
 
-Combines `ccc` (GitHub issue) + `/knowledge-save` (local log) into single command.
+Capture what we learned, discovered, and how things connect. Local log only - no GitHub issue.
 
 ## Usage
 ```
-/snapshot [brief title]
+/snapshot [descriptive title]
 ```
 
 ## Output
-1. **GitHub Issue**: `snapshot: [title]` - for tracking
-2. **Local Log**: `ψ-logs/YYYY-MM/DD/HH.MM_snapshot.md` - for fast search
+**Local Log Only**: `ψ-logs/YYYY-MM/DD/HH.MM_[title-slug].md`
+
+Examples:
+- `/snapshot context-finder default mode` → `10.35_context-finder-default-mode.md`
+- `/snapshot jq emoji regex fix` → `10.40_jq-emoji-regex-fix.md`
 
 ---
 
 ## Steps
 
-### Step 1: Gather Context
+### Step 1: Get Title from Arguments
+If no title provided, ask user or derive from recent commit messages.
+
+Slugify title: lowercase, spaces → hyphens, remove special chars.
+
+### Step 2: Gather Context
 ```bash
-# Current state
-git status --short
-git branch --show-current
-
-# Recent activity
 git log --format="%h %ad %s" --date=format:"%H:%M" -10
-
-# Time (GMT+7)
-TZ='Asia/Bangkok' date +"%H:%M"
+git status --short
+TZ='Asia/Bangkok' date +"%H.%M"
 ```
 
-### Step 2: Auto-Extract Tags
-From commit messages, extract:
-- Type prefixes: `feat`, `fix`, `docs`, `refactor`, `test`
-- Component names from paths in `git status`
-- Feature keywords from recent work
-
-### Step 3: Create Local Log
+### Step 3: Create Log File
 ```bash
 mkdir -p "ψ-logs/$(date +%Y-%m)/$(date +%d)"
 ```
 
-Write to `ψ-logs/YYYY-MM/DD/HH.MM_snapshot.md`:
+Filename: `ψ-logs/YYYY-MM/DD/HH.MM_[title-slug].md`
+
+### Step 4: Write Knowledge Content
 
 ```markdown
-# Snapshot: [TITLE]
+# [Title]
 
-**Time**: [HH:MM] GMT+7
-**Branch**: [branch]
+**Time**: HH:MM GMT+7
 
-## Context Links
-- **Issues**: #XX, #YY (related issues from session)
-- **Commits**:
-  - `hash` HH:MM - message
-- **Tags**: `tag1` `tag2` `tag3`
+## What We Learned
+- [Key insight 1]
+- [Key insight 2]
 
-## What Happened
-- [Action 1]
-- [Action 2]
+## How Things Connect
+- [Relationship 1]: X relates to Y because...
+- [Relationship 2]: Pattern A enables B...
 
 ## Key Discoveries
-- [Finding 1]
-- [Finding 2]
+- [Discovery with context]
 
-## Files Touched
-```
-[git status --short]
-```
-
-## Next Steps
-- [ ] [Next 1]
-- [ ] [Next 2]
-
-## Raw Thoughts
-[Unprocessed ideas, questions, observations]
-```
-
-### Step 4: Create GitHub Issue
-Title: `snapshot: [TITLE]`
-
-Body:
-```markdown
-**Time**: [HH:MM] GMT+7
-**Branch**: [branch]
-**Log**: `ψ-logs/YYYY-MM/DD/HH.MM_snapshot.md`
-
-## Current State
-[Brief description of where we are]
-
-## Recent Commits
+## Commits
 - `hash` message
-- `hash` message
-
-## Uncommitted Changes
-```
-[git status --short or "Clean"]
-```
-
-## Key Discoveries
-- [Finding 1]
-- [Finding 2]
-
-## Next Steps
-- [ ] [Next 1]
-- [ ] [Next 2]
 
 ## Tags
 `tag1` `tag2` `tag3`
+
+## Raw Thoughts
+[Unprocessed observations, questions, ideas]
 ```
 
-### Step 5: Commit & Output
+### Step 5: Commit
 ```bash
 git add "ψ-logs/"
-git commit -m "snapshot: [TITLE]"
-```
-
-Output:
-```
-Snapshot created:
-- Issue: #XX (link)
-- Log: ψ-logs/YYYY-MM/DD/HH.MM_snapshot.md
-- Commit: abc1234
+git commit -m "learn: [title]"
 ```
 
 ---
 
+## Content Focus
+
+### What We Learned
+- Insights gained this session
+- "Aha" moments
+- Corrections to previous understanding
+
+### How Things Connect
+- Relationships between components
+- Patterns that emerged
+- Why X works with Y
+
+### Key Discoveries
+- Technical findings
+- Gotchas and workarounds
+- Things that surprised us
+
+---
+
 ## Rules
-- **FAST** - < 30 seconds total
-- **LINK EVERYTHING** - Issues, commits, files are mandatory
-- **DUAL OUTPUT** - Both GitHub issue AND local log
-- **AUTO-TAG** - Extract from commits, don't ask user
-- **GMT+7** - Primary timezone, always
+- **DESCRIPTIVE FILENAME** - Title becomes filename slug
+- **NO GITHUB ISSUE** - Use `ccc` for that
+- **KNOWLEDGE FOCUS** - What we learned, not what we did
+- **RELATIONSHIPS** - How things connect
+- **FAST** - < 20 seconds
 
 ## Arguments
 ARGUMENTS: $ARGUMENTS
