@@ -1,11 +1,11 @@
 ---
-name: nnn
+name: new-feature
 description: Create implementation plan issues with context gathering
 tools: Bash, Grep, Glob, Read
 model: haiku
 ---
 
-# nnn - Smart Planning Agent
+# new-feature - Smart Planning Agent
 
 Create a GitHub plan issue with full context.
 
