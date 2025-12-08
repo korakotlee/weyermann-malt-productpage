@@ -12,6 +12,19 @@
 | [CLAUDE_lessons.md](CLAUDE_lessons.md) | Lessons learned, patterns, anti-patterns |
 | [CLAUDE_templates.md](CLAUDE_templates.md) | Retrospective template, commit format, issue templates |
 
+### When to Read
+
+**Start every session by reading this file (CLAUDE.md) and CLAUDE_safety.md** - these contain critical rules that prevent destructive actions. Before spawning any subagent, check CLAUDE_subagents.md to understand available tools and their appropriate use. When using short codes like `ccc`, `nnn`, or `rrr`, refer to CLAUDE_workflows.md for the full workflow details. The lessons and templates files are reference material - consult them when you're stuck, making architectural decisions, or creating documentation.
+
+| File | When to Read | Priority |
+|------|--------------|----------|
+| `CLAUDE.md` | **Every session start** | 🔴 Required |
+| `CLAUDE_safety.md` | **Before any git/file operation** | 🔴 Required |
+| `CLAUDE_subagents.md` | Before spawning agents | 🟡 As needed |
+| `CLAUDE_workflows.md` | When using short codes (ccc/nnn/rrr) | 🟡 As needed |
+| `CLAUDE_lessons.md` | When stuck or making decisions | 🟢 Reference |
+| `CLAUDE_templates.md` | When creating retrospectives/issues | 🟢 Reference |
+
 ---
 
 ## Golden Rules
