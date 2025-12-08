@@ -26,9 +26,6 @@ Search and return **TIME + REFERENCE** for all results.
 
 ## Files
 path (YYYY-MM-DD HH:MM)
-
----
-📊 results: X | in: ~Yk | out: ~Zk | tools: N
 ```
 
 ## Commands
@@ -37,11 +34,3 @@ path (YYYY-MM-DD HH:MM)
 git log --format="%h (%ad) %s" --date=format:"%H:%M" -15
 gh issue list --limit 10 --json number,title,createdAt
 ```
-
-## Token Tracking
-
-Track and report:
-- **results**: count of items found
-- **in**: input tokens (tool results read, estimate `chars/4`)
-- **out**: output tokens (your response `chars/4`)
-- **tools**: number of tool calls made
